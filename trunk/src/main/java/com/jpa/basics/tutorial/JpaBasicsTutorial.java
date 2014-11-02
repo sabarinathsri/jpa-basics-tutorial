@@ -5,6 +5,7 @@ import com.jpa.basics.tutorial.service.ArtistService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 
@@ -16,9 +17,10 @@ public class JpaBasicsTutorial {
         ArtistService service = new ArtistService(em);
 
         System.out.println("--- Create and persist artist ---");
-        em.getTransaction().begin();
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
         Artist artist = service.createArtist(1, "Franz Ferdinand", "Rock");
-        em.getTransaction().commit();
+        transaction.commit();
         System.out.println(String.format("Persisted: %s\n", artist));
 
         System.out.println("--- Find artist ---");
@@ -32,15 +34,15 @@ public class JpaBasicsTutorial {
         }
 
         System.out.println("--- Update artist ---");
-        em.getTransaction().begin();
+        transaction.begin();
         artist = service.changeArtistGenre(1, "Indie Rock");
-        em.getTransaction().commit();
+        transaction.commit();
         System.out.println(String.format("Updated: %s\n", artist));
 
         System.out.println("--- Remove artist ---");
-        em.getTransaction().begin();
+        transaction.begin();
         service.removeArtist(1);
-        em.getTransaction().commit();
+        transaction.commit();
         artist = service.findArtist(1);
         System.out.println(String.format("Found: %s\n", artist));
     }
